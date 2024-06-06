@@ -3,12 +3,8 @@
 from typing import List, Tuple
 
 
-<<<<<<< HEAD
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
-=======
-def zoom_array(lst: Tuple, factor: int = 2) -> Tuple:
     """ Return zoomed in list """
->>>>>>> b49cfc19d5eb56309e9818654e3893c750501b0d
     zoomed_in: Tuple = [
         item for item in lst
         for i in range(int(factor))
