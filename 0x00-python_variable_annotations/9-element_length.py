@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-""" Type annotated function element_length that takes a list of strings and returns a list of tuples"""
+""" Type annotated function element_length that takes
+a list of strings and returns a list of tuples
+"""
 from typing import List, Tuple, Sequence, Iterable
 
 
