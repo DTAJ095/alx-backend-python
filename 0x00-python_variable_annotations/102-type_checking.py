@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """ Advanced type-annotated function """
-from typing import List, Union, Tuple
+from typing import List, Tuple
 
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """ Return zoomed array """
     zoomed_in: List = [
-        item for item in lst for i in range(factor)
+        item for item in lst for i in range(int(factor))
     ]
     return zoomed_in
 
