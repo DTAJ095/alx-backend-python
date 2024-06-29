@@ -28,9 +28,10 @@ class TestAccessNestedMap(unittest.TestCase):
     def test_access_nested_map_exception(self,
                                          nested_map: Dict,
                                          path: Tuple[str],
-                                         exception: Exception) -> None:
-        with self.assertRaises(exception):
+                                         expected) -> None:
+        with self.assertRaises(KeyError) as err:
             access_nested_map(nested_map, path)
+        self.assertEqual(f"KeyError('{expected}')", repr(err.exception))
 
 
 class TestGetJson(unittest.TestCase):
