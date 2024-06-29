@@ -17,19 +17,17 @@ class TestAccessNestedMap(TestCase):
         # ({"a": 1}, ["a"], 1),
         # ({"a": {"b": 2}}, ["a", "b"], 2),
     ])
-    
     def test_access_nested_map(self,
                                nested_map: Dict,
                                path: Tuple[str],
                                expected: Union[int, Dict]) -> None:
         """ Test access_nested_map """
         self.assertEqual(access_nested_map(nested_map, path), expected)
-    
+
     @parameterized.expand([
         ({}, ("a",), KeyError),
         ({"a": 1}, ("a", "b"), KeyError),
     ])
-    
     def test_access_nested_map_exception(self,
                                          nested_map: Dict,
                                          path: Tuple[str],
@@ -44,7 +42,6 @@ class TestGetJson(TestCase):
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False}),
     ])
-    
     def test_get_json(self, test_url: str, test_payload: Dict) -> None:
         """ Test get_json """
         mock_response = Mock()
@@ -64,7 +61,7 @@ class TestMemoize(TestCase):
         @memoize
         def a_property(self):
             return self.a_method()
-        
+
         with patch.object(TestClass,
                           'a_method',
                           return_value=lambda: 42) as mock_method:
@@ -72,16 +69,3 @@ class TestMemoize(TestCase):
             self.assertEqual(test_class.a_property(), 42)
             self.assertEqual(test_class.a_property(), 42)
             mock_method.assert_called_once()
-            # def __init__(self):
-            #     self._nb = 0
-            
-            # @memoize
-            # def nb_calls(self):
-            #     """ nb_calls """
-            #     self._nb += 1
-            #     return self._nb
-        
-        # test = TestClass()
-        # self.assertEqual(test.nb_calls(), 1)
-        # self.assertEqual(test.nb_calls(), 1)
-        # self.assertEqual(test.nb_calls(), 1)
