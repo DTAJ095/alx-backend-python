@@ -2,20 +2,17 @@
 """ Parameterize a unit test """
 import unittest
 from unittest.mock import patch, Mock
-from unittest import TestCase
 from utils import access_nested_map, get_json, memoize
 import parameterized
 from typing import Dict, Tuple, Union
 
 
-class TestAccessNestedMap(TestCase):
+class TestAccessNestedMap(unittest.TestCase):
     """ TestAccessNestedMap class """
     @parameterized.expand([
         ({"a": 1}, ("a",), 1),
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2),
-        # ({"a": 1}, ["a"], 1),
-        # ({"a": {"b": 2}}, ["a", "b"], 2),
     ])
     def test_access_nested_map(self,
                                nested_map: Dict,
@@ -31,12 +28,12 @@ class TestAccessNestedMap(TestCase):
     def test_access_nested_map_exception(self,
                                          nested_map: Dict,
                                          path: Tuple[str],
-                                         expected: Exception) -> None:
-        with self.assertRaises(expected):
+                                         exception: Exception) -> None:
+        with self.assertRaises(exception):
             access_nested_map(nested_map, path)
 
 
-class TestGetJson(TestCase):
+class TestGetJson(unittest.TestCase):
     """ TestGetJson class """
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
@@ -44,13 +41,13 @@ class TestGetJson(TestCase):
     ])
     def test_get_json(self, test_url: str, test_payload: Dict) -> None:
         """ Test get_json """
-        mock_response = Mock()
-        mock_response.json.return_value = test_payload
-        with patch('requests.get', return_value=mock_response):
+        attrs = {'json.return_value': test_payload}
+        with patch('requests.get', return_value=Mock(**attrs)) as get_request:
             self.assertEqual(get_json(test_url), test_payload)
+            get_request.assert_called_once(test_url)
 
 
-class TestMemoize(TestCase):
+class TestMemoize(unittest.TestCase):
     """ TestMemoize class """
     def test_memoize(self) -> None:
         """ Test memoize """
@@ -64,8 +61,8 @@ class TestMemoize(TestCase):
 
         with patch.object(TestClass,
                           'a_method',
-                          return_value=lambda: 42) as mock_method:
+                          return_value=lambda: 42) as memo_func:
             test_class = TestClass()
             self.assertEqual(test_class.a_property(), 42)
             self.assertEqual(test_class.a_property(), 42)
-            mock_method.assert_called_once()
+            memo_func.assert_called_once()
