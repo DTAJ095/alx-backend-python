@@ -16,7 +16,8 @@ class TestGithubOrgClient(unittest.TestCase):
         ("abc", {"login": "abc"}),
     ])
     @patch('client.get_json')
-    def test_org(self, org: str, response: Dict, mock_get_json: MagicMock) -> None:
+    def test_org(self, org: str,
+                 response: Dict, mock_get_json: MagicMock) -> None:
         """ Test org """
         mock_get_json.return_value = MagicMock(return_value=response)
         client = GithubOrgClient(org)
@@ -28,9 +29,11 @@ class TestGithubOrgClient(unittest.TestCase):
         """ Test public repos URL """
         with patch('client.GithubOrgClient.org',
                    new_callable=PropertyMock) as mock_org:
-            mock_org.return_value = {"repos_url": "://https://api.github.com/users/google/repos"}
+            mock_org.return_value = {
+                "repos_url": "://https://api.github.com/users/google/repos"}
             client = GithubOrgClient("google")
-            self.assertEqual(client._public_repos_url, "https://api.github.com/orgs/google/repos")
+            self.assertEqual(client._public_repos_url,
+                             "https://api.github.com/orgs/google/repos")
 
     @patch('client.get_json')
     def test_public_repos(self, mock_get_json: MagicMock) -> None:
@@ -86,7 +89,7 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(client.public_repos(), test_payload['repos'])
             mock_public_repos_url.assert_called_once()
         mock_get_json.assert_called_once()
-    
+
     @parameterized.expand([
         ({'license': {'key': "bsd-3-clause"}}, "bsd-3-clause", True),
         ({'license': {'key': "bsl-1.0"}}, "bsl-1.0", False),
@@ -96,4 +99,3 @@ class TestGithubOrgClient(unittest.TestCase):
         client = GithubOrgClient("google")
         client_has_license = client.has_license(repo, key)
         self.assertEqual(client_has_license, expected)
-
