@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch, Mock
 from utils import access_nested_map, get_json, memoize
 import parameterized
+from typing import Dict, Tuple, Union
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -13,7 +14,10 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a",), {"b": 2}),
         ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
-    def test_access_nested_map(self, nested_map, path, expected):
+    def test_access_nested_map(self,
+                               nested_map: Dict,
+                               path: Tuple[str],
+                               expected: Union[Dict, int]) -> None:
         """ Test access_nested_map """
         self.assertEqual(access_nested_map(nested_map, path), expected)
 
@@ -21,8 +25,11 @@ class TestAccessNestedMap(unittest.TestCase):
         ({}, ("a",), KeyError),
         ({"a": 1}, ("a", "b"), KeyError),
     ])
-    def test_access_nested_map_exception(self, nested_map, path,expected):
-        """ Test access_nested_map exception """
+    def test_access_nested_map_exception(self,
+                                         nested_map: Dict,
+                                         path: Tuple[str],
+                                         expected) -> None:
+        """ test access nested map with exception """
         with self.assertRaises(KeyError) as err:
             access_nested_map(nested_map, path)
         self.assertEqual(f"KeyError('{expected}')", repr(err.exception))
@@ -52,7 +59,7 @@ class TestMemoize(unittest.TestCase):
 
         @memoize
         def a_property(self):
-            """ a_property """
+            """ a property """
             return self.a_method()
 
         with patch.object(TestClass,
