@@ -115,7 +115,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         ]}
         cls.get_patcher = patch('requests.get', **conf)
         cls.mock = cls.get_patcher.start()
-    
+
     @classmethod
     def tearDownClass(cls) -> None:
         """ Tear down class """
